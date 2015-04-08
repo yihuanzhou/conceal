@@ -30,13 +30,11 @@ public class Crypto {
   private final KeyChain mKeyChain;
   private final NativeCryptoLibrary mNativeCryptoLibrary;
   private final GCMCipherHelper mGCMCipherHelper;
-  private final CBCCipherHelper mCBCCipherHelper;
 
   public Crypto(KeyChain keyChain, NativeCryptoLibrary nativeCryptoLibrary) {
     mKeyChain = keyChain;
     mNativeCryptoLibrary = nativeCryptoLibrary;
     mGCMCipherHelper = new GCMCipherHelper(mKeyChain, mNativeCryptoLibrary);
-    mCBCCipherHelper = new CBCCipherHelper(mKeyChain, mNativeCryptoLibrary);
   }
 
   /**
@@ -87,15 +85,7 @@ public class Crypto {
     return mGCMCipherHelper.getCipherInputStream(cipherStream, entity, cryptoVersion, cipherID);
   }
 
-  public InputStream getCBCCipherInputStream(InputStream cipherStream)
-      throws IOException, CryptoInitializationException, KeyChainException {
-    byte cryptoVersion = (byte) cipherStream.read();
-    byte cipherID = (byte) cipherStream.read();
-
-    return mCBCCipherHelper.getCipherInputStream(cipherStream, cryptoVersion, cipherID);
-  }
-
-    /**
+  /**
    * A convenience method to encrypt data if the data to be processed is small and can
    * be held in memory.
    * @param plainTextBytes Bytes of the plain text.
