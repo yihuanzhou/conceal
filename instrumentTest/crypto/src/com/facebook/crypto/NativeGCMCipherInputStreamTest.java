@@ -123,8 +123,8 @@ public class NativeGCMCipherInputStreamTest extends InstrumentationTestCase {
     InputStream inputStream = null;
     try {
       inputStream = mCrypto.getGCMCipherInputStream(
-              fakeCipherInputStream,
-              new Entity(CryptoTestUtils.ENTITY_NAME)
+          fakeCipherInputStream,
+          new Entity(CryptoTestUtils.ENTITY_NAME)
       );
 
       // We expect an exception after reading all the bytes
@@ -211,8 +211,8 @@ public class NativeGCMCipherInputStreamTest extends InstrumentationTestCase {
     byte[] cipheredData = CryptoSerializerHelper.createCipheredData(mIV, result.cipherText, result.tag);
 
     InputStream inputStream = mCrypto.getGCMCipherInputStream(
-      new ByteArrayInputStream(cipheredData),
-      new Entity(CryptoTestUtils.ENTITY_NAME));
+        new ByteArrayInputStream(cipheredData),
+        new Entity(CryptoTestUtils.ENTITY_NAME));
     byte[] decryptedData = ByteStreams.toByteArray(inputStream);
     inputStream.close();
     assertTrue(CryptoTestUtils.DECRYPTED_DATA_IS_DIFFERENT, Arrays.equals(mData, decryptedData));
