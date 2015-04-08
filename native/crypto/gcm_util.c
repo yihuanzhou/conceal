@@ -97,7 +97,7 @@ GCM_JNI_CTX* Get_GCM_JNI_CTX(JNIEnv* env, jobject obj) {
   return (GCM_JNI_CTX*) Get_JNI_CTX(env, obj, fieldId);
 }
 
-EVP_CIPHER_CTX* Get_Cipher_CTX(JNIEnv* env, jobject obj) {
+EVP_CIPHER_CTX* Get_GCM_Cipher_CTX(JNIEnv* env, jobject obj) {
   GCM_JNI_CTX* jniCtxPtr = (GCM_JNI_CTX*) Get_GCM_JNI_CTX(env, obj);
   if (!jniCtxPtr) {
     return NULL;

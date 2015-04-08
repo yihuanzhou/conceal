@@ -15,11 +15,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import com.facebook.crypto.exception.KeyChainException;
-import com.facebook.crypto.mac.NativeMac;
-import com.facebook.crypto.streams.*;
 import com.facebook.crypto.exception.CryptoInitializationException;
+import com.facebook.crypto.exception.KeyChainException;
 import com.facebook.crypto.keychain.KeyChain;
+import com.facebook.crypto.mac.NativeMac;
+import com.facebook.crypto.streams.FixedSizeByteArrayOutputStream;
+import com.facebook.crypto.streams.NativeMacLayeredInputStream;
+import com.facebook.crypto.streams.NativeMacLayeredOutputStream;
 import com.facebook.crypto.util.Assertions;
 import com.facebook.crypto.util.NativeCryptoLibrary;
 
@@ -27,12 +29,14 @@ public class Crypto {
 
   private final KeyChain mKeyChain;
   private final NativeCryptoLibrary mNativeCryptoLibrary;
-  private final CipherHelper mCipherHelper;
+  private final GCMCipherHelper mGCMCipherHelper;
+    private final CBCCipherHelper mCBCCipherHelper;
 
   public Crypto(KeyChain keyChain, NativeCryptoLibrary nativeCryptoLibrary) {
     mKeyChain = keyChain;
     mNativeCryptoLibrary = nativeCryptoLibrary;
-    mCipherHelper = new CipherHelper(mKeyChain, mNativeCryptoLibrary);
+    mGCMCipherHelper = new GCMCipherHelper(mKeyChain, mNativeCryptoLibrary);
+      mCBCCipherHelper = new CBCCipherHelper(mKeyChain, mNativeCryptoLibrary);
   }
 
   /**
@@ -57,9 +61,9 @@ public class Crypto {
    * @return A ciphered output stream to write to.
    * @throws IOException
    */
-  public OutputStream getCipherOutputStream(OutputStream cipherStream, Entity entity)
+  public OutputStream getGCMCipherOutputStream(OutputStream cipherStream, Entity entity)
       throws IOException, CryptoInitializationException, KeyChainException {
-    return mCipherHelper.getCipherOutputStream(cipherStream, entity);
+    return mGCMCipherHelper.getCipherOutputStream(cipherStream, entity);
   }
 
   /**
@@ -75,15 +79,23 @@ public class Crypto {
    * @throws CryptoInitializationException Thrown if the crypto libraries could not be initialized.
    * @throws KeyChainException Thrown if there is trouble managing keys.
    */
-  public InputStream getCipherInputStream(InputStream cipherStream, Entity entity)
+  public InputStream getGCMCipherInputStream(InputStream cipherStream, Entity entity)
       throws IOException, CryptoInitializationException, KeyChainException {
     byte cryptoVersion = (byte) cipherStream.read();
     byte cipherID = (byte) cipherStream.read();
 
-    return mCipherHelper.getCipherInputStream(cipherStream, entity, cryptoVersion, cipherID);
+    return mGCMCipherHelper.getCipherInputStream(cipherStream, entity, cryptoVersion, cipherID);
   }
 
-  /**
+    public InputStream getCBCCipherInputStream(InputStream cipherStream)
+            throws IOException, CryptoInitializationException, KeyChainException {
+        byte cryptoVersion = (byte) cipherStream.read();
+        byte cipherID = (byte) cipherStream.read();
+
+        return mCBCCipherHelper.getCipherInputStream(cipherStream, cryptoVersion, cipherID);
+    }
+
+    /**
    * A convenience method to encrypt data if the data to be processed is small and can
    * be held in memory.
    * @param plainTextBytes Bytes of the plain text.
@@ -97,9 +109,9 @@ public class Crypto {
    */
   public byte[] encrypt(byte[] plainTextBytes, Entity entity)
     throws KeyChainException, CryptoInitializationException, IOException {
-    int cipheredBytesLength = plainTextBytes.length + mCipherHelper.getCipherMetaDataLength();
+    int cipheredBytesLength = plainTextBytes.length + mGCMCipherHelper.getCipherMetaDataLength();
     FixedSizeByteArrayOutputStream outputStream = new FixedSizeByteArrayOutputStream(cipheredBytesLength);
-    OutputStream cipherStream = mCipherHelper.getCipherOutputStream(outputStream, entity);
+    OutputStream cipherStream = mGCMCipherHelper.getCipherOutputStream(outputStream, entity);
     cipherStream.write(plainTextBytes);
     cipherStream.close();
     return outputStream.getBytes();
@@ -122,9 +134,9 @@ public class Crypto {
 
     int cipherTextLength = cipherTextBytes.length;
     ByteArrayInputStream cipheredStream = new ByteArrayInputStream(cipherTextBytes, 2, cipherTextLength);
-    InputStream plainTextStream = mCipherHelper.getCipherInputStream(cipheredStream, entity, cryptoVersion, cipherID);
+    InputStream plainTextStream = mGCMCipherHelper.getCipherInputStream(cipheredStream, entity, cryptoVersion, cipherID);
 
-    int plainTextLength = cipherTextLength - mCipherHelper.getCipherMetaDataLength();
+    int plainTextLength = cipherTextLength - mGCMCipherHelper.getCipherMetaDataLength();
     FixedSizeByteArrayOutputStream output = new FixedSizeByteArrayOutputStream(plainTextLength);
     byte[] buffer = new byte[1024];
     int read;

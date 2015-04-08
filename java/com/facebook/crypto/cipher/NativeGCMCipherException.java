@@ -13,7 +13,7 @@ package com.facebook.crypto.cipher;
 import java.io.IOException;
 
 /**
- * Base exception class for all cipher operations
+ * Base exception class for all GCM cipher operations
  */
 public class NativeGCMCipherException extends IOException {
   public NativeGCMCipherException(String message) {

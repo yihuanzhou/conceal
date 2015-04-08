@@ -69,9 +69,9 @@ public class SimpleEncryptTest extends InstrumentationTestCase {
   public void testMatchesWithStreamingAPI() throws KeyChainException, CryptoInitializationException, IOException {
     byte[] cipherText = mCrypto.encrypt(mData, new Entity(CryptoTestUtils.ENTITY_NAME));
     ByteArrayOutputStream cipherStream = new ByteArrayOutputStream();
-    OutputStream outputStream = mCrypto.getCipherOutputStream(
-        cipherStream,
-        new Entity(CryptoTestUtils.ENTITY_NAME));
+    OutputStream outputStream = mCrypto.getGCMCipherOutputStream(
+            cipherStream,
+            new Entity(CryptoTestUtils.ENTITY_NAME));
     outputStream.write(mData);
     outputStream.close();
     assertTrue(CryptoTestUtils.ENCRYPTED_DATA_IS_DIFFERENT, Arrays.equals(cipherStream.toByteArray(), cipherText));

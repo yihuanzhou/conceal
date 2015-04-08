@@ -8,6 +8,7 @@
  *
  */
 #include <jni.h>
+#include <cbc_util.h>
 #include <gcm_util.h>
 #include <hmac_util.h>
 
@@ -17,6 +18,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     return -1;
   }
 
+  Init_CBC_CTX_Ptr_Field(env);
   Init_GCM_CTX_Ptr_Field(env);
   Init_HMAC_CTX_Ptr_Field(env);
   return JNI_VERSION_1_4;

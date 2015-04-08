@@ -33,9 +33,9 @@ public class SimpleDecryptTest extends InstrumentationTestCase {
     mData = new byte[CryptoTestUtils.NUM_DATA_BYTES];
     ByteArrayOutputStream cipherOutputStream = new ByteArrayOutputStream();
 
-    OutputStream outputStream = mCrypto.getCipherOutputStream(
-        cipherOutputStream,
-        new Entity(CryptoTestUtils.ENTITY_NAME));
+    OutputStream outputStream = mCrypto.getGCMCipherOutputStream(
+            cipherOutputStream,
+            new Entity(CryptoTestUtils.ENTITY_NAME));
     outputStream.write(mData);
     outputStream.close();
 

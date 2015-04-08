@@ -17,12 +17,12 @@ import java.io.OutputStream;
 /**
  * A helper class with common functionality required for cipher operations in {@link Crypto}.
  */
-/* package */ class CipherHelper {
+/* package */ class GCMCipherHelper {
 
   private final KeyChain mKeyChain;
   private final NativeCryptoLibrary mNativeCryptoLibrary;
 
-  public CipherHelper(KeyChain keyChain, NativeCryptoLibrary nativeCryptoLibrary) {
+  public GCMCipherHelper(KeyChain keyChain, NativeCryptoLibrary nativeCryptoLibrary) {
     mKeyChain = keyChain;
     mNativeCryptoLibrary = nativeCryptoLibrary;
   }

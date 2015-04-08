@@ -21,7 +21,7 @@ GCM_JNI_CTX* Create_GCM_JNI_CTX(jbyte* keyBytes, jbyte* ivBytes);
 
 GCM_JNI_CTX* Get_GCM_JNI_CTX(JNIEnv* env, jobject obj);
 
-EVP_CIPHER_CTX* Get_Cipher_CTX(JNIEnv* env, jobject obj);
+EVP_CIPHER_CTX* Get_GCM_Cipher_CTX(JNIEnv* env, jobject obj);
 
 void Set_GCM_JNI_CTX(JNIEnv* env, jobject obj, GCM_JNI_CTX* ctx);
 

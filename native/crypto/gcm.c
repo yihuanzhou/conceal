@@ -21,7 +21,7 @@ JNIEXPORT int JNICALL Java_com_facebook_crypto_cipher_NativeGCMCipher_nativeEncr
   jint tagLen) {
 
   int bytesWritten = 0;
-  EVP_CIPHER_CTX* ctx = Get_Cipher_CTX(env, obj);
+  EVP_CIPHER_CTX* ctx = Get_GCM_Cipher_CTX(env, obj);
   if (!ctx) {
     return CRYPTO_FAILURE;
   }
@@ -68,7 +68,7 @@ JNIEXPORT int JNICALL Java_com_facebook_crypto_cipher_NativeGCMCipher_nativeEncr
     return CRYPTO_FAILURE;
   }
 
-  EVP_CIPHER_CTX* ctx = Get_Cipher_CTX(env, obj);
+  EVP_CIPHER_CTX* ctx = Get_GCM_Cipher_CTX(env, obj);
   if (!ctx) {
     return CRYPTO_FAILURE;
   }
@@ -98,7 +98,7 @@ JNIEXPORT int JNICALL Java_com_facebook_crypto_cipher_NativeGCMCipher_nativeUpda
   jbyteArray output) {
 
   int bytesWritten = 0;
-  EVP_CIPHER_CTX* ctx = Get_Cipher_CTX(env, obj);
+  EVP_CIPHER_CTX* ctx = Get_GCM_Cipher_CTX(env, obj);
   if (!ctx) {
     return CRYPTO_NO_BYTES_WRITTEN;
   }
@@ -131,7 +131,7 @@ JNIEXPORT int JNICALL Java_com_facebook_crypto_cipher_NativeGCMCipher_nativeUpda
   jint dataLength) {
 
   int bytesWritten = 0;
-  EVP_CIPHER_CTX* ctx = Get_Cipher_CTX(env, obj);
+  EVP_CIPHER_CTX* ctx = Get_GCM_Cipher_CTX(env, obj);
   if (!ctx) {
     return CRYPTO_NO_BYTES_WRITTEN;
   }
@@ -158,7 +158,7 @@ JNIEXPORT int JNICALL Java_com_facebook_crypto_cipher_NativeGCMCipher_nativeDecr
   int bytesWritten = 0;
   char temp[1];
 
-  EVP_CIPHER_CTX* ctx = Get_Cipher_CTX(env, obj);
+  EVP_CIPHER_CTX* ctx = Get_GCM_Cipher_CTX(env, obj);
   if (!ctx) {
     return CRYPTO_FAILURE;
   }
