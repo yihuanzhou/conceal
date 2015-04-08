@@ -10,11 +10,6 @@
 
 package com.facebook.crypto;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import com.facebook.crypto.exception.CryptoInitializationException;
 import com.facebook.crypto.exception.KeyChainException;
 import com.facebook.crypto.keychain.KeyChain;
@@ -25,18 +20,23 @@ import com.facebook.crypto.streams.NativeMacLayeredOutputStream;
 import com.facebook.crypto.util.Assertions;
 import com.facebook.crypto.util.NativeCryptoLibrary;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 public class Crypto {
 
   private final KeyChain mKeyChain;
   private final NativeCryptoLibrary mNativeCryptoLibrary;
   private final GCMCipherHelper mGCMCipherHelper;
-    private final CBCCipherHelper mCBCCipherHelper;
+  private final CBCCipherHelper mCBCCipherHelper;
 
   public Crypto(KeyChain keyChain, NativeCryptoLibrary nativeCryptoLibrary) {
     mKeyChain = keyChain;
     mNativeCryptoLibrary = nativeCryptoLibrary;
     mGCMCipherHelper = new GCMCipherHelper(mKeyChain, mNativeCryptoLibrary);
-      mCBCCipherHelper = new CBCCipherHelper(mKeyChain, mNativeCryptoLibrary);
+    mCBCCipherHelper = new CBCCipherHelper(mKeyChain, mNativeCryptoLibrary);
   }
 
   /**
@@ -87,13 +87,13 @@ public class Crypto {
     return mGCMCipherHelper.getCipherInputStream(cipherStream, entity, cryptoVersion, cipherID);
   }
 
-    public InputStream getCBCCipherInputStream(InputStream cipherStream)
-            throws IOException, CryptoInitializationException, KeyChainException {
-        byte cryptoVersion = (byte) cipherStream.read();
-        byte cipherID = (byte) cipherStream.read();
+  public InputStream getCBCCipherInputStream(InputStream cipherStream)
+      throws IOException, CryptoInitializationException, KeyChainException {
+    byte cryptoVersion = (byte) cipherStream.read();
+    byte cipherID = (byte) cipherStream.read();
 
-        return mCBCCipherHelper.getCipherInputStream(cipherStream, cryptoVersion, cipherID);
-    }
+    return mCBCCipherHelper.getCipherInputStream(cipherStream, cryptoVersion, cipherID);
+  }
 
     /**
    * A convenience method to encrypt data if the data to be processed is small and can

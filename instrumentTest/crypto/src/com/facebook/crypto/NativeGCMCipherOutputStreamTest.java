@@ -45,8 +45,8 @@ public class NativeGCMCipherOutputStreamTest extends InstrumentationTestCase {
 
   public void testCompatibleWithBouncycastle() throws Exception {
     OutputStream outputStream = mCrypto.getGCMCipherOutputStream(
-            mCipherOutputStream,
-            new Entity(CryptoTestUtils.ENTITY_NAME));
+        mCipherOutputStream,
+        new Entity(CryptoTestUtils.ENTITY_NAME));
     outputStream.write(mData);
     outputStream.close();
     byte[] opensslEncrypted = mCipherOutputStream.toByteArray();
@@ -73,8 +73,8 @@ public class NativeGCMCipherOutputStreamTest extends InstrumentationTestCase {
 
   public void testWriteData() throws Exception {
     OutputStream outputStream = mCrypto.getGCMCipherOutputStream(
-            mCipherOutputStream,
-            new Entity(CryptoTestUtils.ENTITY_NAME));
+        mCipherOutputStream,
+        new Entity(CryptoTestUtils.ENTITY_NAME));
     outputStream.write(mData);
     outputStream.close();
     byte[] encryptedData = CryptoSerializerHelper.cipherText(mCipherOutputStream.toByteArray());
@@ -87,8 +87,8 @@ public class NativeGCMCipherOutputStreamTest extends InstrumentationTestCase {
 
   public void testWriteDataUsingOffsets() throws Exception {
     OutputStream outputStream = mCrypto.getGCMCipherOutputStream(
-            mCipherOutputStream,
-            new Entity(CryptoTestUtils.ENTITY_NAME));
+        mCipherOutputStream,
+        new Entity(CryptoTestUtils.ENTITY_NAME));
     outputStream.write(mData, 0, mData.length / 2);
     outputStream.write(mData, mData.length / 2, mData.length / 2 + mData.length % 2);
     outputStream.close();
@@ -104,8 +104,8 @@ public class NativeGCMCipherOutputStreamTest extends InstrumentationTestCase {
     String dataToEncrypt = "data to encrypt";
     String expectedEncryptedString = "69VhniqXP+xA0CcKJFx5";
     OutputStream outputStream = mCrypto.getGCMCipherOutputStream(
-            mCipherOutputStream,
-            new Entity(CryptoTestUtils.ENTITY_NAME));
+        mCipherOutputStream,
+        new Entity(CryptoTestUtils.ENTITY_NAME));
     outputStream.write(dataToEncrypt.getBytes("UTF-8"));
     outputStream.close();
     byte[] encryptedData = CryptoSerializerHelper.cipherText(mCipherOutputStream.toByteArray());
@@ -120,8 +120,8 @@ public class NativeGCMCipherOutputStreamTest extends InstrumentationTestCase {
     String dataToEncrypt = "data to encrypt";
     String expectedEncryptedString = "69VhniqXP+xA0CcKJFx5";
     OutputStream outputStream = mCrypto.getGCMCipherOutputStream(
-            mCipherOutputStream,
-            new Entity(CryptoTestUtils.ENTITY_NAME));
+        mCipherOutputStream,
+        new Entity(CryptoTestUtils.ENTITY_NAME));
 
     byte[] inputData = dataToEncrypt.getBytes("UTF-8");
     for (byte inputByte : inputData) {

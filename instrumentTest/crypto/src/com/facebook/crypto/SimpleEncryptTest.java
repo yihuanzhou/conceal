@@ -70,8 +70,8 @@ public class SimpleEncryptTest extends InstrumentationTestCase {
     byte[] cipherText = mCrypto.encrypt(mData, new Entity(CryptoTestUtils.ENTITY_NAME));
     ByteArrayOutputStream cipherStream = new ByteArrayOutputStream();
     OutputStream outputStream = mCrypto.getGCMCipherOutputStream(
-            cipherStream,
-            new Entity(CryptoTestUtils.ENTITY_NAME));
+        cipherStream,
+        new Entity(CryptoTestUtils.ENTITY_NAME));
     outputStream.write(mData);
     outputStream.close();
     assertTrue(CryptoTestUtils.ENCRYPTED_DATA_IS_DIFFERENT, Arrays.equals(cipherStream.toByteArray(), cipherText));

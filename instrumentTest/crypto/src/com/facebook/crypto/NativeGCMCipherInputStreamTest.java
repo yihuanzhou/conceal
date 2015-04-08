@@ -55,8 +55,8 @@ public class NativeGCMCipherInputStreamTest extends InstrumentationTestCase {
     ByteArrayOutputStream cipherOutputStream = new ByteArrayOutputStream();
 
     OutputStream outputStream = mCrypto.getGCMCipherOutputStream(
-            cipherOutputStream,
-            new Entity(CryptoTestUtils.ENTITY_NAME));
+        cipherOutputStream,
+        new Entity(CryptoTestUtils.ENTITY_NAME));
     outputStream.write(mData);
     outputStream.close();
 
@@ -68,8 +68,8 @@ public class NativeGCMCipherInputStreamTest extends InstrumentationTestCase {
     InputStream inputStream = null;
     try {
       inputStream = mCrypto.getGCMCipherInputStream(
-              mCipherInputStream,
-              new Entity(CryptoTestUtils.FAKE_ENTITY_NAME)
+          mCipherInputStream,
+          new Entity(CryptoTestUtils.FAKE_ENTITY_NAME)
       );
 
       // We expect an exception when all the bytes are read.
@@ -99,8 +99,8 @@ public class NativeGCMCipherInputStreamTest extends InstrumentationTestCase {
     InputStream inputStream = null;
     try {
       inputStream = mCrypto.getGCMCipherInputStream(
-              mCipherInputStream,
-              new Entity(CryptoTestUtils.ENTITY_NAME)
+          mCipherInputStream,
+          new Entity(CryptoTestUtils.ENTITY_NAME)
       );
       ByteStreams.toByteArray(inputStream);
     } catch (IOException e) {
@@ -141,8 +141,8 @@ public class NativeGCMCipherInputStreamTest extends InstrumentationTestCase {
 
   public void testDecryptValidData() throws Exception {
     InputStream inputStream = mCrypto.getGCMCipherInputStream(
-            mCipherInputStream,
-            new Entity(CryptoTestUtils.ENTITY_NAME));
+        mCipherInputStream,
+        new Entity(CryptoTestUtils.ENTITY_NAME));
     byte[] decryptedData = ByteStreams.toByteArray(inputStream);
     inputStream.close();
     assertTrue(CryptoTestUtils.DECRYPTED_DATA_IS_DIFFERENT, Arrays.equals(mData, decryptedData));
@@ -150,8 +150,8 @@ public class NativeGCMCipherInputStreamTest extends InstrumentationTestCase {
 
   public void testDecryptValidDataInSmallIncrements() throws Exception {
     InputStream inputStream = mCrypto.getGCMCipherInputStream(
-            mCipherInputStream,
-            new Entity(CryptoTestUtils.ENTITY_NAME));
+        mCipherInputStream,
+        new Entity(CryptoTestUtils.ENTITY_NAME));
 
     ByteArrayOutputStream decryptedData = new ByteArrayOutputStream();
     byte[] buffer = new byte[NativeGCMCipher.TAG_LENGTH / 6];
@@ -169,8 +169,8 @@ public class NativeGCMCipherInputStreamTest extends InstrumentationTestCase {
   public void testDecryptValidDataReadUsingOffsets() throws Exception {
     byte[] decryptedData = new byte[CryptoTestUtils.NUM_DATA_BYTES];
     InputStream inputStream = mCrypto.getGCMCipherInputStream(
-            mCipherInputStream,
-            new Entity(CryptoTestUtils.ENTITY_NAME));
+        mCipherInputStream,
+        new Entity(CryptoTestUtils.ENTITY_NAME));
 
     int readSize = decryptedData.length / 2;
     ByteStreams.readFully(inputStream, decryptedData, 0, readSize);
@@ -185,8 +185,8 @@ public class NativeGCMCipherInputStreamTest extends InstrumentationTestCase {
   public void testThrowsOnCloseWhenAllDataNotRead() throws Exception {
     byte[] decryptedData = new byte[CryptoTestUtils.NUM_DATA_BYTES];
     InputStream inputStream = mCrypto.getGCMCipherInputStream(
-            mCipherInputStream,
-            new Entity(CryptoTestUtils.ENTITY_NAME));
+        mCipherInputStream,
+        new Entity(CryptoTestUtils.ENTITY_NAME));
 
     int readSize = decryptedData.length / 2;
     ByteStreams.readFully(inputStream, decryptedData, 0, readSize);
@@ -211,8 +211,8 @@ public class NativeGCMCipherInputStreamTest extends InstrumentationTestCase {
     byte[] cipheredData = CryptoSerializerHelper.createCipheredData(mIV, result.cipherText, result.tag);
 
     InputStream inputStream = mCrypto.getGCMCipherInputStream(
-            new ByteArrayInputStream(cipheredData),
-            new Entity(CryptoTestUtils.ENTITY_NAME));
+      new ByteArrayInputStream(cipheredData),
+      new Entity(CryptoTestUtils.ENTITY_NAME));
     byte[] decryptedData = ByteStreams.toByteArray(inputStream);
     inputStream.close();
     assertTrue(CryptoTestUtils.DECRYPTED_DATA_IS_DIFFERENT, Arrays.equals(mData, decryptedData));
