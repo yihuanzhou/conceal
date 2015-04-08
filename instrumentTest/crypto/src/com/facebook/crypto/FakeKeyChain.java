@@ -12,6 +12,7 @@ package com.facebook.crypto;
 
 import java.util.Arrays;
 
+import com.facebook.crypto.cipher.NativeCBCCipher;
 import com.facebook.crypto.cipher.NativeGCMCipher;
 import com.facebook.crypto.keychain.KeyChain;
 import com.facebook.crypto.mac.NativeMac;

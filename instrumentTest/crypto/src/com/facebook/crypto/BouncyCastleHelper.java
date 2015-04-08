@@ -10,9 +10,6 @@
 
 package com.facebook.crypto;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
-
 import android.annotation.TargetApi;
 import android.os.Build;
 
@@ -23,6 +20,14 @@ import org.spongycastle.crypto.engines.AESEngine;
 import org.spongycastle.crypto.modes.GCMBlockCipher;
 import org.spongycastle.crypto.params.AEADParameters;
 import org.spongycastle.crypto.params.KeyParameter;
+
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
+import java.util.Arrays;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
 public class BouncyCastleHelper {
@@ -51,6 +56,14 @@ public class BouncyCastleHelper {
     byte[] tag =
         Arrays.copyOfRange(bouncyCastleOut, CryptoTestUtils.NUM_DATA_BYTES, bouncyCastleOut.length);
     return new Result(cipherText, tag);
+  }
+
+  public static byte[] bouncyCastleCBCEncrypt(byte[] data, byte[] key, byte[] iv) 
+      throws GeneralSecurityException {
+    Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding" /*transformation*/, "BC" /*provider*/);
+    SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
+    cipher.init(Cipher.ENCRYPT_MODE, secretKey, new IvParameterSpec(iv));
+    return cipher.doFinal(data);
   }
 
   public static class Result {

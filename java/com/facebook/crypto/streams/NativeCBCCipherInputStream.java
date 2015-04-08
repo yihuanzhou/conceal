@@ -12,16 +12,19 @@ import java.io.InputStream;
  */
 public class NativeCBCCipherInputStream extends FilterInputStream {
 
-  private static final int UPDATE_BUFFER_SIZE = 256;
+  private static final int UPDATE_BUFFER_SIZE = 1024*8;
 
   private final NativeCBCCipher mCipher;
   private final byte[] mUpdateBuffer;
+  private int mUpdateRemainder;
+  private int mUpdateRemainderOffset;
   private boolean mDidFinal = false;
 
   public NativeCBCCipherInputStream(InputStream in, NativeCBCCipher cipher) {
     super(in);
     mCipher = cipher;
     mUpdateBuffer = new byte[UPDATE_BUFFER_SIZE + mCipher.getCipherBlockSize()];
+    mUpdateRemainder = 0;
   }
 
   @Override
@@ -53,14 +56,14 @@ public class NativeCBCCipherInputStream extends FilterInputStream {
 
     int read = super.read(buffer, offset, length);
 
-    if (read == -1 && mDidFinal) {
+    if (read == -1) {// && mDidFinal) {
       return -1;
-    } else if (!mDidFinal) {
+    } /*else if (!mDidFinal) {
       int bytesDecrypted = mCipher.decryptFinal(mUpdateBuffer);
       System.arraycopy(mUpdateBuffer, 0, buffer, offset, bytesDecrypted);
       mDidFinal = true;
       return bytesDecrypted;
-    }
+    }*/
 
     int times = read / UPDATE_BUFFER_SIZE;
     int remainder = read % UPDATE_BUFFER_SIZE;
@@ -86,15 +89,15 @@ public class NativeCBCCipherInputStream extends FilterInputStream {
 
 //    @Override
 //    public int read(byte[] buffer, int offset, int count) throws IOException {
-//        if (updateRemainder > 0) {
-//            int returnLength = Math.min(count, updateRemainder);
-//            System.arraycopy(mUpdateBuffer, updateRemainderOffset, buffer, offset,
+//        if (mUpdateRemainder > 0) {
+//            int returnLength = Math.min(count, mUpdateRemainder);
+//            System.arraycopy(mUpdateBuffer, mUpdateRemainderOffset, buffer, offset,
 //                    returnLength);
-//            this.updateRemainder -= returnLength;
-//            this.updateRemainderOffset += returnLength;
+//            mUpdateRemainder -= returnLength;
+//            mUpdateRemainderOffset += returnLength;
 //            return returnLength;
 //        }
-//        if (didFinal) {
+//        if (mDidFinal) {
 //            return -1;
 //        }
 //
@@ -112,9 +115,9 @@ public class NativeCBCCipherInputStream extends FilterInputStream {
 //            System.arraycopy(mUpdateBuffer, 0, buffer, currentReadOffset,
 //                    returnLength);
 //
-//            this.didFinal = true;
-//            this.updateRemainder = bytesDecrypted - returnLength;
-//            this.updateRemainderOffset = returnLength;
+//            mDidFinal = true;
+//            mUpdateRemainder = bytesDecrypted - returnLength;
+//            mUpdateRemainderOffset = returnLength;
 //            return returnLength;
 //        }
 //
@@ -130,9 +133,17 @@ public class NativeCBCCipherInputStream extends FilterInputStream {
 //            offset += UPDATE_BUFFER_SIZE;
 //        }
 //
-//        if (remainder > 0) {
-//            int bytesDecrypted = mCipher.decryptUpdate(buffer, offset, remainder,
-//                    mUpdateBuffer);
-//            int returnLength = Math.min(count - (currentReadOffset - originalOffset), bytesDecrypted);
-
+//      if (remainder > 0) {
+//        int bytesDecrypted = mCipher.decryptUpdate(buffer, offset, remainder,
+//            mUpdateBuffer);
+//        int returnLength = Math.min(count - (currentReadOffset - originalOffset), bytesDecrypted);
+//        System.arraycopy(mUpdateBuffer, 0, buffer, currentReadOffset,	returnLength);
+//        currentReadOffset += returnLength;
+//        mUpdateRemainder = bytesDecrypted - returnLength;
+//        mUpdateRemainderOffset = returnLength;
+//      }
+//
+//      return currentReadOffset - originalOffset;
+//
+//    }
 }

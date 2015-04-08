@@ -1,11 +1,11 @@
 package com.facebook.crypto.cipher;
 
-import java.util.Locale;
-
 import com.facebook.crypto.exception.CryptoInitializationException;
 import com.facebook.crypto.util.Assertions;
 import com.facebook.crypto.util.NativeCryptoLibrary;
 import com.facebook.proguard.annotations.DoNotStrip;
+
+import java.util.Locale;
 
 /**
  * Various native functions to encrypt/decrypt data using CBC.
@@ -103,7 +103,10 @@ public class NativeCBCCipher {
         mCurrentState = STATE.DECRYPT_FINALIZED;
         int bytesRead = nativeDecryptFinal(data);
         if (bytesRead < 0) {
-            throw new NativeCBCCipherException("decryptFinal");
+            throw new NativeCBCCipherException(
+                formatStrLocaleSafe(
+                    "decryptFinal read %d",
+                    bytesRead));
         }
         return bytesRead;
     }

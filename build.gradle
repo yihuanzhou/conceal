@@ -25,6 +25,10 @@ android {
         java.srcDirs = ['java'] 
         jni.srcDirs = []
       }
+      androidTest {
+        manifest.srcFile 'instrumentTest/crypto/AndroidManifest.xml'
+        java.srcDirs = ['instrumentTest/crypto']
+      }
     }
 
     task ndkBuildRelease(type: Exec) {
